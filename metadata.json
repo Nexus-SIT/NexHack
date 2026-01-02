@@ -1,0 +1,6 @@
+{
+  "name": "NexHackPortal",
+  "description": "A comprehensive Hackathon Management System featuring team formation, QR-based food coupon redemption, and role-based dashboards for participants and organizers. Made by Manish.",
+  "author": "Manish",
+  "requestFramePermissions": []
+}
