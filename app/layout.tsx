@@ -6,7 +6,7 @@ import { AuthProvider } from '@/components/AuthProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'NexHackPortal - Hackathon Management',
+    title: 'Nexathon - Hackathon Management',
     description: 'A comprehensive Hackathon Management System featuring team formation, QR-based food coupon redemption, and role-based dashboards. Made by Manish.',
     authors: [{ name: 'Manish' }],
 };
