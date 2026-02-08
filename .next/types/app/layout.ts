@@ -1,4 +1,4 @@
-// File: D:\Programs\Projects\hackportal\app\layout.tsx
+// File: D:\Programs\Projects\NexHack\NexHack\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

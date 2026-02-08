@@ -21,13 +21,16 @@ export default function Landing() {
                                 <div className="mt-6">
                                     <div className="inline-flex items-center px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-primary font-medium text-sm mb-6">
                                         <span className="animate-pulse mr-2 w-2 h-2 rounded-full bg-primary"></span>
-                                        Registration Open for 2024
+                                        Multiple Events &amp; Activities
                                     </div>
                                     <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl mb-6">
-                                        Build the future at <span className="text-primary">NexHackPortal</span>
+                                        Welcome to <span className="text-primary">Nexothsav</span>
                                     </h1>
                                     <p className="mt-4 text-lg text-gray-500">
-                                        Join 500+ developers, designers, and innovators for a 48-hour sprint to solve global challenges. Prizes worth $50k up for grabs.
+                                        We are conducting many exciting activities and events! Our flagship event <span className="font-semibold text-primary">Srinathon</span> is a 24-hour hackathon where innovation meets creativity.
+                                    </p>
+                                    <p className="mt-3 text-lg text-gray-500">
+                                        Other thrilling events include <span className="font-medium">Robo Race</span>, <span className="font-medium">Aero Events</span>, and many more!
                                     </p>
                                     <div className="mt-8 flex gap-4">
                                         <button
