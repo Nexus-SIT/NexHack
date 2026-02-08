@@ -2,32 +2,25 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import { User, CouponType, CouponStatus, UserRole } from '@/types';
-import { getAllStats, redeemCoupon, getStoredCoupons } from '@/services/mockDb';
-import { ScanLine, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { UserRole } from '@/types';
+import { getAllStats } from '@/services/database';
+import { ScanLine, Users, Trophy, Utensils, Loader2, ArrowRight, RefreshCw, TrendingUp } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/components/AuthProvider';
 
-// Dynamic imports for Recharts to avoid SSR issues
-const BarChart = dynamic(() => import('recharts').then(mod => mod.BarChart), { ssr: false });
-const Bar = dynamic(() => import('recharts').then(mod => mod.Bar), { ssr: false });
-const XAxis = dynamic(() => import('recharts').then(mod => mod.XAxis), { ssr: false });
-const YAxis = dynamic(() => import('recharts').then(mod => mod.YAxis), { ssr: false });
-const CartesianGrid = dynamic(() => import('recharts').then(mod => mod.CartesianGrid), { ssr: false });
-const Tooltip = dynamic(() => import('recharts').then(mod => mod.Tooltip), { ssr: false });
-const ResponsiveContainer = dynamic(() => import('recharts').then(mod => mod.ResponsiveContainer), { ssr: false });
-const PieChart = dynamic(() => import('recharts').then(mod => mod.PieChart), { ssr: false });
-const Pie = dynamic(() => import('recharts').then(mod => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import('recharts').then(mod => mod.Cell), { ssr: false });
+interface Stats {
+    totalUsers: number;
+    totalParticipants: number;
+    paidParticipants: number;
+    totalTeams: number;
+    mealsConsumed: { breakfast: number; lunch: number; dinner: number };
+    totalMealsServed: number;
+}
 
 export default function AdminDashboard() {
     const router = useRouter();
     const { user, logout, isLoading: authLoading } = useAuth();
-
-    const [stats, setStats] = useState<any>(null);
-    const [scanInput, setScanInput] = useState('');
-    const [scanResult, setScanResult] = useState<{ status: 'success' | 'error'; message: string } | null>(null);
+    const [stats, setStats] = useState<Stats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -54,27 +47,11 @@ export default function AdminDashboard() {
         setIsLoading(false);
     };
 
-    const handleScan = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            await redeemCoupon(scanInput);
-            setScanResult({ status: 'success', message: `Coupon ${scanInput} redeemed successfully!` });
-            setScanInput('');
-            loadStats();
-
-            setTimeout(() => setScanResult(null), 3000);
-        } catch (err: any) {
-            setScanResult({ status: 'error', message: err.message });
-        }
-    };
-
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
     if (authLoading || !user) {
         return (
             <Layout user={null} onLogout={() => { }}>
-                <div className="flex justify-center items-center h-96">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <div className="block-blue flex justify-center items-center h-96">
+                    <Loader2 className="w-10 h-10 animate-spin text-[#FFD700]" />
                 </div>
             </Layout>
         );
@@ -83,141 +60,197 @@ export default function AdminDashboard() {
     if (isLoading) {
         return (
             <Layout user={user} onLogout={logout}>
-                <div className="flex justify-center items-center h-96">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <div className="block-blue flex justify-center items-center h-96">
+                    <RefreshCw className="w-10 h-10 animate-spin text-[#FFD700]" />
                 </div>
             </Layout>
         );
     }
 
+    const paymentPercent = stats && stats.totalParticipants > 0
+        ? Math.round((stats.paidParticipants / stats.totalParticipants) * 100)
+        : 0;
+
     return (
         <Layout user={user} onLogout={logout}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                    {user.role === 'ADMIN' ? 'Admin Dashboard' : 'Organizer Dashboard'}
-                </h2>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                    {/* QR Scanner Simulator */}
-                    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                        <div className="flex items-center mb-6">
-                            <div className="p-3 bg-indigo-100 rounded-full mr-4">
-                                <ScanLine className="w-6 h-6 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-gray-900">Scan Coupon</h3>
-                                <p className="text-sm text-gray-500">Enter Coupon ID to simulate scan</p>
-                            </div>
+            {/* Header */}
+            <section className="block-navy py-8 border-b-4 border-[#FFD700]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h1 className="font-carnival text-2xl sm:text-3xl text-[#FFD700]">
+                                🛡️ Admin Dashboard
+                            </h1>
+                            <p className="font-body text-gray-300 mt-1">Manage Srinathon & Nexothsav</p>
                         </div>
 
-                        <form onSubmit={handleScan} className="space-y-4">
-                            <div>
-                                <input
-                                    type="text"
-                                    value={scanInput}
-                                    onChange={(e) => setScanInput(e.target.value)}
-                                    placeholder="e.g. c_u1_ln"
-                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3 border"
-                                    autoFocus
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none"
-                            >
-                                Redeem Coupon
-                            </button>
-                        </form>
-
-                        {scanResult && (
-                            <div className={`mt-4 p-4 rounded-md flex items-start ${scanResult.status === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-                                }`}>
-                                {scanResult.status === 'success' ? (
-                                    <CheckCircle2 className="w-5 h-5 mr-2 mt-0.5" />
-                                ) : (
-                                    <AlertCircle className="w-5 h-5 mr-2 mt-0.5" />
-                                )}
-                                <span>{scanResult.message}</span>
-                            </div>
-                        )}
+                        <button
+                            onClick={() => router.push('/admin/scanner')}
+                            className="btn-carnival btn-carnival-red"
+                        >
+                            <ScanLine className="w-5 h-5" />
+                            Food Scanner
+                            <ArrowRight className="w-4 h-4" />
+                        </button>
                     </div>
+                </div>
+            </section>
 
-                    {/* Key Stats Cards */}
-                    <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Participants</p>
-                            <p className="mt-2 text-3xl font-extrabold text-gray-900">{stats?.totalParticipants || 0}</p>
+            {/* Stats */}
+            <section className="block-yellow py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="card-carnival p-4 sm:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-[#00B4D8] border-3 border-[#1A1A2E] flex items-center justify-center">
+                                    <Users className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <p className="font-body text-xs text-[#1A1A2E] opacity-60">Participants</p>
+                                    <p className="font-carnival text-2xl text-[#1A1A2E]">{stats?.totalParticipants || 0}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Teams Formed</p>
-                            <p className="mt-2 text-3xl font-extrabold text-gray-900">{stats?.totalTeams || 0}</p>
+
+                        <div className="card-carnival p-4 sm:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-[#22C55E] border-3 border-[#1A1A2E] flex items-center justify-center">
+                                    <Trophy className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <p className="font-body text-xs text-[#1A1A2E] opacity-60">Teams</p>
+                                    <p className="font-carnival text-2xl text-[#1A1A2E]">{stats?.totalTeams || 0}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Meals Served</p>
-                            <p className="mt-2 text-3xl font-extrabold text-gray-900">{stats?.redeemedCoupons || 0}</p>
-                            <p className="text-xs text-gray-400 mt-1">/ {stats?.totalCoupons || 0} coupons</p>
+
+                        <div className="card-carnival p-4 sm:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-[#FF0000] border-3 border-[#1A1A2E] flex items-center justify-center">
+                                    <Utensils className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <p className="font-body text-xs text-[#1A1A2E] opacity-60">Meals Served</p>
+                                    <p className="font-carnival text-2xl text-[#1A1A2E]">{stats?.totalMealsServed || 0}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Check-in Rate</p>
-                            <p className="mt-2 text-3xl font-extrabold text-gray-900">
-                                {stats && stats.totalCoupons > 0 ? Math.round((stats.redeemedCoupons / stats.totalCoupons) * 100) : 0}%
-                            </p>
+
+                        <div className="card-carnival p-4 sm:p-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-[#FFD700] border-3 border-[#1A1A2E] flex items-center justify-center">
+                                    <TrendingUp className="w-6 h-6 text-[#1A1A2E]" />
+                                </div>
+                                <div>
+                                    <p className="font-body text-xs text-[#1A1A2E] opacity-60">Paid Users</p>
+                                    <p className="font-carnival text-2xl text-[#1A1A2E]">{stats?.paidParticipants || 0}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* Visualizations */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h3 className="text-lg font-bold text-gray-900 mb-6">Meal Distribution</h3>
-                        <div className="h-64">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={[
-                                    { name: 'Breakfast', redeemed: 12, total: 50 },
-                                    { name: 'Lunch', redeemed: 45, total: 50 },
-                                    { name: 'Dinner', redeemed: 5, total: 50 },
-                                ]}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="redeemed" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                                    <Bar dataKey="total" fill="#e5e7eb" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
+            {/* Meal & Payment Status */}
+            <section className="block-blue py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Meal Distribution */}
+                        <div className="card-carnival p-6">
+                            <h3 className="font-carnival text-lg text-[#1A1A2E] mb-6">🍕 Meal Distribution</h3>
+                            <div className="space-y-4">
+                                {(['breakfast', 'lunch', 'dinner'] as const).map((meal) => {
+                                    const served = stats?.mealsConsumed[meal] || 0;
+                                    const total = stats?.paidParticipants || 1;
+                                    const percent = Math.round((served / total) * 100);
+                                    const emojis = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
+
+                                    return (
+                                        <div key={meal} className="space-y-2">
+                                            <div className="flex justify-between">
+                                                <span className="font-carnival text-[#1A1A2E] capitalize">
+                                                    {emojis[meal]} {meal}
+                                                </span>
+                                                <span className="font-body text-[#1A1A2E]">
+                                                    {served} / {total}
+                                                </span>
+                                            </div>
+                                            <div className="h-4 bg-gray-200 border-2 border-[#1A1A2E]">
+                                                <div
+                                                    className="h-full bg-[#FF0000]"
+                                                    style={{ width: `${percent}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h3 className="text-lg font-bold text-gray-900 mb-6">User Roles</h3>
-                        <div className="h-64">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={[
-                                            { name: 'Participants', value: stats?.totalParticipants || 0 },
-                                            { name: 'Organizers', value: 5 },
-                                            { name: 'Admins', value: 2 },
-                                        ]}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={60}
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        paddingAngle={5}
-                                        dataKey="value"
-                                    >
-                                        {COLORS.map((color, index) => (
-                                            <Cell key={`cell-${index}`} fill={color} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip />
-                                </PieChart>
-                            </ResponsiveContainer>
+                        {/* Payment Status */}
+                        <div className="card-carnival p-6">
+                            <h3 className="font-carnival text-lg text-[#1A1A2E] mb-6">💰 Payment Status</h3>
+                            <div className="flex items-center justify-center gap-8">
+                                <div className="text-center">
+                                    <div className="w-32 h-32 border-8 border-[#1A1A2E] rounded-full flex items-center justify-center bg-[#FFD700]">
+                                        <span className="font-carnival text-3xl text-[#1A1A2E]">{paymentPercent}%</span>
+                                    </div>
+                                    <p className="font-body text-[#1A1A2E] mt-2">Paid</p>
+                                </div>
+                                <div className="space-y-2 text-left">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-4 h-4 bg-[#FFD700] border-2 border-[#1A1A2E]"></div>
+                                        <span className="font-body text-[#1A1A2E]">
+                                            Paid: {stats?.paidParticipants || 0}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-4 h-4 bg-gray-300 border-2 border-[#1A1A2E]"></div>
+                                        <span className="font-body text-[#1A1A2E]">
+                                            Pending: {(stats?.totalParticipants || 0) - (stats?.paidParticipants || 0)}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            {/* Quick Actions */}
+            <section className="block-navy py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h3 className="font-carnival text-xl text-[#FFD700] mb-6">⚡ Quick Actions</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button
+                            onClick={() => router.push('/admin/scanner')}
+                            className="card-carnival-yellow p-6 text-left hover:transform hover:scale-[1.02] transition-transform"
+                        >
+                            <ScanLine className="w-8 h-8 text-[#FF0000] mb-2" />
+                            <h4 className="font-carnival text-lg text-[#1A1A2E]">Scan Meals</h4>
+                            <p className="font-body text-sm text-[#1A1A2E] opacity-60">Open food scanner</p>
+                        </button>
+
+                        <button
+                            onClick={loadStats}
+                            className="card-carnival p-6 text-left hover:transform hover:scale-[1.02] transition-transform"
+                        >
+                            <RefreshCw className="w-8 h-8 text-[#00B4D8] mb-2" />
+                            <h4 className="font-carnival text-lg text-[#1A1A2E]">Refresh Stats</h4>
+                            <p className="font-body text-sm text-[#1A1A2E] opacity-60">Update dashboard data</p>
+                        </button>
+
+                        <button
+                            onClick={() => router.push('/')}
+                            className="card-carnival p-6 text-left hover:transform hover:scale-[1.02] transition-transform"
+                        >
+                            <Trophy className="w-8 h-8 text-[#22C55E] mb-2" />
+                            <h4 className="font-carnival text-lg text-[#1A1A2E]">View Site</h4>
+                            <p className="font-body text-sm text-[#1A1A2E] opacity-60">Go to homepage</p>
+                        </button>
+                    </div>
+                </div>
+            </section>
         </Layout>
     );
 }

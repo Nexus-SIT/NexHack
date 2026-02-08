@@ -1,120 +1,153 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/services/mockDb';
-import { User, UserRole } from '@/types';
-import { Lock, Mail, Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, Mail, ArrowRight, Sparkles, PartyPopper } from 'lucide-react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/components/AuthProvider';
+import { UserRole } from '@/types';
 
-export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+export default function Login() {
     const router = useRouter();
-    const { user, login: authLogin, logout, isLoading: authLoading } = useAuth();
+    const { login, isLoading } = useAuth();
 
-    useEffect(() => {
-        if (!authLoading && user) {
-            router.push(user.role === UserRole.PARTICIPANT ? '/dashboard' : '/admin');
-        }
-    }, [user, authLoading, router]);
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
+        if (!email.trim()) return;
+
         setError('');
+        setIsSubmitting(true);
 
         try {
-            if (!email) throw new Error('Email is required');
-            const loggedInUser = await login(email);
-            authLogin(loggedInUser);
-            router.push(loggedInUser.role === 'PARTICIPANT' ? '/dashboard' : '/admin');
+            const user = await login(email);
+            if (user.role === UserRole.PARTICIPANT) {
+                router.push('/dashboard');
+            } else {
+                router.push('/admin');
+            }
         } catch (err: any) {
-            setError(err.message || 'Failed to login');
+            setError(err.message || 'Login failed');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
-    if (authLoading) {
-        return (
-            <Layout user={null} onLogout={() => { }}>
-                <div className="min-h-[calc(100vh-64px)] flex items-center justify-center">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                </div>
-            </Layout>
-        );
-    }
-
-    if (user) {
-        return null;
-    }
+    const quickLogin = async (email: string) => {
+        setEmail(email);
+        setIsSubmitting(true);
+        try {
+            const user = await login(email);
+            if (user.role === UserRole.PARTICIPANT) {
+                router.push('/dashboard');
+            } else {
+                router.push('/admin');
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
-        <Layout user={user} onLogout={logout}>
-            <div className="min-h-[calc(100vh-64px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-                <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
-                    <div className="text-center">
-                        <div className="mx-auto h-12 w-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                            <Lock className="h-6 w-6 text-primary" />
+        <Layout user={null} onLogout={() => { }}>
+            <div className="block-blue min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-12 relative overflow-hidden">
+                {/* Background pattern */}
+                <div className="absolute inset-0 pattern-dots opacity-10"></div>
+
+                <div className="w-full max-w-md relative">
+                    {/* Header */}
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-[#FFD700] border-4 border-[#1A1A2E] rounded-full mb-4 shadow-[4px_4px_0_#1A1A2E]">
+                            <PartyPopper className="w-10 h-10 text-[#FF0000]" />
                         </div>
-                        <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-                            Sign in to NexHackPortal
-                        </h2>
-                        <p className="mt-2 text-sm text-gray-600">
-                            Or enter <code className="bg-gray-100 px-1 rounded">admin@hack.com</code> to test admin features.
+                        <h1 className="font-carnival text-3xl sm:text-4xl text-[#1A1A2E]">
+                            Join the Party!
+                        </h1>
+                        <p className="font-body text-[#1A1A2E] mt-2">
+                            Sign in to access Nexothsav portal
                         </p>
                     </div>
-                    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                        <div className="rounded-md shadow-sm -space-y-px">
+
+                    {/* Login Card */}
+                    <div className="card-carnival p-6 sm:p-8">
+                        <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label htmlFor="email-address" className="sr-only">Email address</label>
+                                <label htmlFor="email" className="block font-carnival text-sm text-[#1A1A2E] mb-2">
+                                    Email Address
+                                </label>
                                 <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-gray-400" />
-                                    </div>
+                                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#1A1A2E] opacity-50 w-5 h-5" />
                                     <input
-                                        id="email-address"
-                                        name="email"
+                                        id="email"
                                         type="email"
-                                        autoComplete="email"
-                                        required
-                                        className="appearance-none rounded-lg relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                                        placeholder="Email address"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="you@example.com"
+                                        className="input-carnival pl-12"
+                                        required
+                                        disabled={isSubmitting}
                                     />
                                 </div>
                             </div>
-                        </div>
 
-                        {error && (
-                            <div className="flex items-center text-sm text-red-600 bg-red-50 p-3 rounded-md">
-                                <AlertCircle className="w-4 h-4 mr-2" />
-                                {error}
-                            </div>
-                        )}
+                            {error && (
+                                <div className="bg-[#FF0000] text-white font-body p-3 border-2 border-[#1A1A2E]">
+                                    {error}
+                                </div>
+                            )}
 
-                        <div>
                             <button
                                 type="submit"
-                                disabled={isLoading}
-                                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 disabled:cursor-not-allowed transition-all"
+                                disabled={isSubmitting || !email.trim()}
+                                className="w-full btn-carnival btn-carnival-yellow disabled:opacity-50"
                             >
-                                {isLoading ? (
-                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                {isSubmitting ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Entering...
+                                    </>
                                 ) : (
-                                    'Sign In / Register'
+                                    <>
+                                        Let's Go!
+                                        <ArrowRight className="w-5 h-5" />
+                                    </>
                                 )}
                             </button>
-                        </div>
+                        </form>
 
-                        <div className="text-xs text-center text-gray-500 mt-4">
-                            Note: This is a demo. Entering a new email will auto-register a participant account.
+                        {/* Quick Login */}
+                        <div className="mt-8 pt-6 border-t-3 border-[#1A1A2E]">
+                            <p className="font-carnival text-sm text-center text-[#1A1A2E] mb-4">
+                                Quick Demo Login
+                            </p>
+                            <div className="grid grid-cols-2 gap-3">
+                                <button
+                                    onClick={() => quickLogin('alice@hack.com')}
+                                    disabled={isSubmitting}
+                                    className="btn-carnival btn-carnival-white text-sm py-2 disabled:opacity-50"
+                                >
+                                    👤 Participant
+                                </button>
+                                <button
+                                    onClick={() => quickLogin('admin@hack.com')}
+                                    disabled={isSubmitting}
+                                    className="btn-carnival btn-carnival-navy text-sm py-2 disabled:opacity-50"
+                                >
+                                    🛡️ Admin
+                                </button>
+                            </div>
                         </div>
-                    </form>
+                    </div>
+
+                    {/* Footer Note */}
+                    <p className="mt-6 text-center font-body text-sm text-[#1A1A2E]">
+                        New users are automatically registered on first login 🎊
+                    </p>
                 </div>
             </div>
         </Layout>
