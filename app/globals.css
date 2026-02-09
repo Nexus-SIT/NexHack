@@ -1,315 +1,516 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @import "tailwindcss";
 
 /* ===========================================
-   CARVALHEIRA NA LADEIRA - CARNIVAL THEME
-   Brazilian Festival Aesthetic
+   THE RONIN'S SCROLL - GRITTY VINTAGE MANGA
+   Ink-Heavy Cinematic Aesthetic
    =========================================== */
 
 :root {
-  /* Primary Palette */
-  --carnival-blue: #00B4D8;
-  --carnival-blue-dark: #0077B6;
-  --carnival-yellow: #FFD700;
-  --carnival-red: #FF0000;
-  --carnival-navy: #1A1A2E;
-  --carnival-white: #FFFFFF;
-  
-  /* Functional Colors */
-  --bg-primary: var(--carnival-blue);
-  --bg-secondary: var(--carnival-yellow);
-  --bg-accent: var(--carnival-red);
-  --text-primary: var(--carnival-navy);
-  --text-light: var(--carnival-white);
-  
-  /* Shadows */
-  --shadow-hard: 4px 4px 0 var(--carnival-navy);
-  --shadow-hard-sm: 2px 2px 0 var(--carnival-navy);
-  --shadow-hard-lg: 6px 6px 0 var(--carnival-navy);
+  /* ========== JADE & BLOOD PALETTE ========== */
+  --crimson-red: #C91B1A;
+  /* Primary Background */
+  --ink-black: #080808;
+  /* Cards / Heavy contrast */
+  --jade-green: #2F5C5C;
+  /* Accent */
+  --jade-green-light: #4A7A7A;
+  /* Accent hover */
+  --rice-cream: #EFE6D5;
+  /* Text / highlights */
+  --rice-cream-dim: rgba(239, 230, 213, 0.7);
+
+  /* Functional Color Mapping */
+  --bg-primary: var(--crimson-red);
+  --bg-card: var(--ink-black);
+  --accent: var(--jade-green);
+  --accent-hover: var(--jade-green-light);
+  --text-primary: var(--rice-cream);
+  --text-dim: var(--rice-cream-dim);
+
+  /* Hard Shadows (No Blur - Pop Art Style) */
+  --shadow-hard: 10px 10px 0px var(--ink-black);
+  --shadow-hard-sm: 5px 5px 0px var(--ink-black);
+  --shadow-hard-hover: 6px 6px 0px var(--ink-black);
+  --shadow-hard-cream: 8px 8px 0px var(--rice-cream);
+
+  /* Borders */
+  --border-thick: 4px solid var(--ink-black);
+  --border-thick-cream: 4px solid var(--rice-cream);
+  --border-medium: 3px solid var(--ink-black);
 }
 
-/* Base Styles */
+/* ========== GLOBAL NOISE TEXTURE OVERLAY ========== */
+.texture-overlay {
+  position: relative;
+}
+
+.texture-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ========== BASE STYLES ========== */
 body {
-  font-family: 'Space Grotesk', sans-serif;
-  background-color: var(--carnival-blue);
-  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  background-color: var(--crimson-red);
+  color: var(--rice-cream);
+  line-height: 1.6;
 }
 
-/* Typography - Cordel/Woodblock Style Headlines */
-.font-carnival {
-  font-family: 'Archivo Black', sans-serif;
+/* ========== TYPOGRAPHY SYSTEM ========== */
+
+/* MEGA HEADERS - Ultra-Condensed Sans (Anton) */
+.font-mega {
+  font-family: 'Anton', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
 }
 
+/* Sub-Headers - Condensed Sans (Oswald) */
+.font-header {
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+
+/* Body Text - Monospace (JetBrains Mono) */
 .font-body {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
 }
 
-/* Carnival Buttons */
-.btn-carnival {
+/* Vertical Text Layout (Japanese Manga Style) */
+.text-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.text-vertical-upright {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+/* Text with hard outline effect */
+.text-stroke {
+  -webkit-text-stroke: 2px var(--ink-black);
+  paint-order: stroke fill;
+}
+
+.text-stroke-cream {
+  -webkit-text-stroke: 2px var(--rice-cream);
+  paint-order: stroke fill;
+}
+
+/* ========== RONIN BUTTONS ========== */
+.btn-ronin {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 0.875rem;
+  padding: 1rem 1.75rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 3px solid var(--carnival-navy);
+  letter-spacing: 0.08em;
+  border: var(--border-thick);
   box-shadow: var(--shadow-hard);
-  transition: all 0.15s ease;
+  transition: all 0.1s ease;
   cursor: pointer;
+  /* NO ROUNDED CORNERS */
 }
 
-.btn-carnival:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--carnival-navy);
-}
-
-.btn-carnival:active {
+.btn-ronin:hover {
   transform: translate(4px, 4px);
+  box-shadow: var(--shadow-hard-hover);
+}
+
+.btn-ronin:active {
+  transform: translate(10px, 10px);
   box-shadow: none;
 }
 
-.btn-carnival-yellow {
-  background-color: var(--carnival-yellow);
-  color: var(--carnival-navy);
+/* Button Variants */
+.btn-ronin-jade {
+  background-color: var(--jade-green);
+  color: var(--rice-cream);
+  border-color: var(--ink-black);
 }
 
-.btn-carnival-red {
-  background-color: var(--carnival-red);
-  color: var(--carnival-white);
+.btn-ronin-jade:hover {
+  background-color: var(--jade-green-light);
 }
 
-.btn-carnival-white {
-  background-color: var(--carnival-white);
-  color: var(--carnival-navy);
+.btn-ronin-cream {
+  background-color: var(--rice-cream);
+  color: var(--ink-black);
+  border-color: var(--ink-black);
 }
 
-.btn-carnival-navy {
-  background-color: var(--carnival-navy);
-  color: var(--carnival-white);
+.btn-ronin-ink {
+  background-color: var(--ink-black);
+  color: var(--rice-cream);
+  border-color: var(--rice-cream);
+  box-shadow: var(--shadow-hard-cream);
 }
 
-/* Carnival Cards */
-.card-carnival {
-  background-color: var(--carnival-white);
-  border: 3px solid var(--carnival-navy);
+.btn-ronin-ink:hover {
+  box-shadow: 4px 4px 0px var(--rice-cream);
+}
+
+.btn-ronin-ghost {
+  background-color: transparent;
+  color: var(--rice-cream);
+  border: var(--border-thick-cream);
+  box-shadow: none;
+}
+
+.btn-ronin-ghost:hover {
+  background-color: rgba(239, 230, 213, 0.1);
+  transform: none;
+}
+
+/* ========== RONIN CARDS ========== */
+.card-ronin {
+  background-color: var(--ink-black);
+  border: var(--border-thick-cream);
+  box-shadow: var(--shadow-hard-cream);
+  /* NO BORDER RADIUS - Sharp 90° angles */
+}
+
+.card-ronin-cream {
+  background-color: var(--rice-cream);
+  color: var(--ink-black);
+  border: var(--border-thick);
   box-shadow: var(--shadow-hard);
 }
 
-.card-carnival-yellow {
-  background-color: var(--carnival-yellow);
-  border: 3px solid var(--carnival-navy);
+.card-ronin-jade {
+  background-color: var(--jade-green);
+  color: var(--rice-cream);
+  border: var(--border-thick);
   box-shadow: var(--shadow-hard);
 }
 
-/* Scalloped/Wavy Border Dividers */
-.divider-wave {
-  width: 100%;
-  height: 30px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath fill='%231A1A2E' d='M0 20 Q 12.5 0, 25 20 Q 37.5 40, 50 20 Q 62.5 0, 75 20 Q 87.5 40, 100 20 L 100 0 L 0 0 Z'/%3E%3C/svg%3E");
-  background-size: 100px 30px;
-  background-repeat: repeat-x;
+/* ========== DISTRESS EFFECTS ========== */
+
+/* Rough/Torn Edge Effect */
+.distress-edge {
+  clip-path: polygon(0% 2%, 3% 0%, 7% 3%, 12% 1%, 18% 2%, 23% 0%, 30% 2%,
+      38% 0%, 45% 1%, 52% 0%, 60% 2%, 68% 0%, 75% 1%,
+      82% 0%, 88% 2%, 95% 0%, 100% 3%, 100% 97%,
+      97% 100%, 92% 98%, 85% 100%, 78% 98%, 70% 100%,
+      62% 98%, 55% 100%, 48% 98%, 40% 100%, 32% 98%,
+      25% 100%, 18% 98%, 10% 100%, 5% 98%, 0% 100%);
 }
 
-.divider-wave-yellow {
-  width: 100%;
-  height: 30px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath fill='%23FFD700' d='M0 20 Q 12.5 0, 25 20 Q 37.5 40, 50 20 Q 62.5 0, 75 20 Q 87.5 40, 100 20 L 100 0 L 0 0 Z'/%3E%3C/svg%3E");
-  background-size: 100px 30px;
-  background-repeat: repeat-x;
+/* Stamp/Seal Effect */
+.stamp-effect {
+  position: relative;
+  padding: 0.5rem 1rem;
+  background-color: var(--crimson-red);
+  border: 3px solid var(--rice-cream);
+  transform: rotate(-3deg);
 }
 
-.divider-zigzag {
+.stamp-effect::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed var(--rice-cream);
+  pointer-events: none;
+}
+
+/* Ink Splatter Border */
+.ink-border {
+  border: 4px solid var(--ink-black);
+  box-shadow:
+    var(--shadow-hard),
+    inset 0 0 0 2px var(--ink-black);
+}
+
+/* ========== LAYOUT UTILITIES ========== */
+
+/* Asymmetric Containers */
+.offset-left {
+  margin-left: 5%;
+  margin-right: 15%;
+}
+
+.offset-right {
+  margin-left: 15%;
+  margin-right: 5%;
+}
+
+/* Overlapping Elements */
+.overlap-up {
+  margin-top: -2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.overlap-down {
+  margin-bottom: -2rem;
+  position: relative;
+}
+
+/* ========== DIVIDERS (INK STYLE) ========== */
+.divider-ink {
+  width: 100%;
+  height: 4px;
+  background-color: var(--ink-black);
+}
+
+.divider-ink-jagged {
   width: 100%;
   height: 20px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 20'%3E%3Cpath fill='%231A1A2E' d='M0 20 L20 0 L40 20 L40 0 L0 0 Z'/%3E%3C/svg%3E");
-  background-size: 40px 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath fill='%23080808' d='M0 10 L5 0 L15 15 L25 5 L35 18 L45 2 L55 12 L65 0 L75 16 L85 4 L95 14 L100 8 L100 20 L0 20 Z'/%3E%3C/svg%3E");
+  background-size: 100px 20px;
   background-repeat: repeat-x;
 }
 
-.divider-scallop {
+.divider-cream-jagged {
   width: 100%;
-  height: 24px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 24'%3E%3Ccircle cx='20' cy='0' r='20' fill='%231A1A2E'/%3E%3C/svg%3E");
-  background-size: 40px 24px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath fill='%23EFE6D5' d='M0 10 L5 0 L15 15 L25 5 L35 18 L45 2 L55 12 L65 0 L75 16 L85 4 L95 14 L100 8 L100 20 L0 20 Z'/%3E%3C/svg%3E");
+  background-size: 100px 20px;
   background-repeat: repeat-x;
-  background-position: center bottom;
 }
 
-/* Input Styles */
-.input-carnival {
+/* ========== INPUT STYLES ========== */
+.input-ronin {
   width: 100%;
-  padding: 0.875rem 1rem;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  background-color: var(--carnival-white);
-  border: 3px solid var(--carnival-navy);
+  padding: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  background-color: var(--ink-black);
+  color: var(--rice-cream);
+  border: var(--border-thick-cream);
   box-shadow: var(--shadow-hard-sm);
   transition: all 0.15s ease;
+  /* NO BORDER RADIUS */
 }
 
-.input-carnival:focus {
+.input-ronin:focus {
   outline: none;
   box-shadow: var(--shadow-hard);
+  border-color: var(--jade-green-light);
 }
 
-.input-carnival::placeholder {
-  color: rgba(26, 26, 46, 0.5);
+.input-ronin::placeholder {
+  color: var(--rice-cream-dim);
 }
 
-/* Badge Styles */
-.badge-carnival {
+/* ========== BADGE STYLES ========== */
+.badge-ronin {
   display: inline-flex;
   align-items: center;
   padding: 0.25rem 0.75rem;
-  font-family: 'Archivo Black', sans-serif;
-  font-size: 0.75rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  border: 2px solid var(--carnival-navy);
+  letter-spacing: 0.1em;
+  border: 2px solid currentColor;
 }
 
-.badge-carnival-yellow {
-  background-color: var(--carnival-yellow);
-  color: var(--carnival-navy);
+.badge-ronin-jade {
+  background-color: var(--jade-green);
+  color: var(--rice-cream);
+  border-color: var(--ink-black);
 }
 
-.badge-carnival-red {
-  background-color: var(--carnival-red);
-  color: var(--carnival-white);
+.badge-ronin-cream {
+  background-color: var(--rice-cream);
+  color: var(--ink-black);
+  border-color: var(--ink-black);
 }
 
-.badge-carnival-navy {
-  background-color: var(--carnival-navy);
-  color: var(--carnival-white);
+.badge-ronin-crimson {
+  background-color: var(--crimson-red);
+  color: var(--rice-cream);
+  border-color: var(--rice-cream);
 }
 
-/* Color Blocks */
-.block-blue { background-color: var(--carnival-blue); }
-.block-yellow { background-color: var(--carnival-yellow); }
-.block-red { background-color: var(--carnival-red); }
-.block-navy { background-color: var(--carnival-navy); }
-.block-white { background-color: var(--carnival-white); }
-
-/* Text Colors */
-.text-navy { color: var(--carnival-navy); }
-.text-yellow { color: var(--carnival-yellow); }
-.text-red { color: var(--carnival-red); }
-.text-blue { color: var(--carnival-blue); }
-
-/* Sticker Effect */
-.sticker {
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: var(--carnival-yellow);
-  border: 3px solid var(--carnival-navy);
-  transform: rotate(-2deg);
-  box-shadow: var(--shadow-hard-sm);
+/* ========== BACKGROUND BLOCKS ========== */
+.block-crimson {
+  background-color: var(--crimson-red);
 }
 
-/* Carnival Pattern Background */
-.pattern-dots {
-  background-image: radial-gradient(circle, var(--carnival-navy) 2px, transparent 2px);
-  background-size: 20px 20px;
+.block-ink {
+  background-color: var(--ink-black);
 }
 
-.pattern-stripes {
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(26, 26, 46, 0.1) 10px,
-    rgba(26, 26, 46, 0.1) 20px
-  );
+.block-jade {
+  background-color: var(--jade-green);
 }
 
-/* Animation */
-@keyframes bounce-carnival {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+.block-cream {
+  background-color: var(--rice-cream);
+  color: var(--ink-black);
 }
 
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
+/* ========== TEXT COLORS ========== */
+.text-cream {
+  color: var(--rice-cream);
 }
 
-.animate-bounce-carnival {
-  animation: bounce-carnival 2s ease-in-out infinite;
+.text-ink {
+  color: var(--ink-black);
 }
 
-.animate-wiggle {
-  animation: wiggle 1s ease-in-out infinite;
+.text-jade {
+  color: var(--jade-green-light);
 }
 
-/* Festival Sun/Dragon decorative elements */
-.sun-icon {
-  width: 60px;
-  height: 60px;
-  background: var(--carnival-yellow);
-  border: 3px solid var(--carnival-navy);
-  border-radius: 50%;
-  position: relative;
+.text-crimson {
+  color: var(--crimson-red);
 }
 
-.sun-icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: var(--carnival-red);
-  border-radius: 50%;
+/* ========== PATTERNS ========== */
+.pattern-halftone {
+  background-image: radial-gradient(circle, var(--ink-black) 1px, transparent 1px);
+  background-size: 8px 8px;
 }
 
-/* QR Container */
+.pattern-lines {
+  background-image: repeating-linear-gradient(-45deg,
+      transparent,
+      transparent 2px,
+      rgba(8, 8, 8, 0.15) 2px,
+      rgba(8, 8, 8, 0.15) 4px);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes ink-drip {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-jade {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 92, 92, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgba(47, 92, 92, 0);
+  }
+}
+
+.animate-ink-drip {
+  animation: ink-drip 0.6s ease-out forwards;
+}
+
+.animate-pulse-jade {
+  animation: pulse-jade 2s ease-in-out infinite;
+}
+
+/* ========== NAVIGATION ========== */
+.nav-ronin {
+  background-color: var(--ink-black);
+  border-bottom: 4px solid var(--jade-green);
+}
+
+/* ========== FOOTER ========== */
+.footer-ronin {
+  background-color: var(--ink-black);
+  border-top: 4px solid var(--jade-green);
+}
+
+/* ========== QR CONTAINER ========== */
 .qr-container {
-  background: var(--carnival-white);
-  border: 4px solid var(--carnival-navy);
+  background: var(--rice-cream);
+  border: var(--border-thick);
   padding: 1rem;
-  box-shadow: var(--shadow-hard-lg);
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .btn-carnival {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.75rem;
-  }
-  
-  .card-carnival, .card-carnival-yellow {
-    box-shadow: var(--shadow-hard-sm);
-  }
-}
-
-/* Success/Error States */
-.toast-success {
-  background-color: #22C55E;
-  border: 3px solid var(--carnival-navy);
   box-shadow: var(--shadow-hard);
+}
+
+/* ========== SUCCESS/ERROR STATES ========== */
+.toast-success {
+  background-color: var(--jade-green);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  color: var(--rice-cream);
 }
 
 .toast-error {
-  background-color: var(--carnival-red);
-  border: 3px solid var(--carnival-navy);
-  box-shadow: var(--shadow-hard);
+  background-color: var(--crimson-red);
+  border: var(--border-thick-cream);
+  box-shadow: var(--shadow-hard-cream);
+  color: var(--rice-cream);
 }
 
-/* Nav carnival style */
-.nav-carnival {
-  background-color: var(--carnival-navy);
-  border-bottom: 4px solid var(--carnival-yellow);
+/* ========== RESPONSIVE ADJUSTMENTS ========== */
+@media (max-width: 768px) {
+  .btn-ronin {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+  }
+
+  .card-ronin,
+  .card-ronin-cream,
+  .card-ronin-jade {
+    box-shadow: var(--shadow-hard-sm);
+  }
+
+  .text-vertical {
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+  }
+
+  .offset-left,
+  .offset-right {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
-/* Footer carnival style */
-.footer-carnival {
-  background-color: var(--carnival-navy);
-  border-top: 4px solid var(--carnival-yellow);
+/* ========== SCROLL KANJI DECORATION ========== */
+.kanji-decoration::before {
+  content: '武';
+  position: absolute;
+  font-size: 15rem;
+  font-family: serif;
+  opacity: 0.05;
+  color: var(--ink-black);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== SELECTION COLORS ========== */
+::selection {
+  background-color: var(--jade-green);
+  color: var(--rice-cream);
+}
+
+::-moz-selection {
+  background-color: var(--jade-green);
+  color: var(--rice-cream);
 }

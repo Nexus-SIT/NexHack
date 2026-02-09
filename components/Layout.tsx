@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { User, UserRole } from '@/types';
-import { Menu, X, Sparkles, User as UserIcon, LogOut, ScanLine, Sun } from 'lucide-react';
+import { Menu, X, User as UserIcon, LogOut, ScanLine, Swords } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,36 +23,36 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Events', path: '/#about' },
+    { name: 'Events', path: '/#events' },
     { name: 'Schedule', path: '/#schedule' },
   ];
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Carnival Nav */}
-      <nav className="nav-carnival sticky top-0 z-50">
+      {/* Ronin Navigation */}
+      <nav className="nav-ronin sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            {/* Logo */}
+            {/* Logo - Katana/Sword Icon */}
             <div
-              className="flex items-center cursor-pointer gap-2"
+              className="flex items-center cursor-pointer gap-3"
               onClick={() => router.push('/')}
             >
-              <div className="w-10 h-10 bg-[#FFD700] border-2 border-[#FFD700] rounded-full flex items-center justify-center">
-                <Sun className="w-6 h-6 text-[#FF0000]" />
+              <div className="w-10 h-10 bg-[#2F5C5C] border-2 border-[#EFE6D5] flex items-center justify-center">
+                <Swords className="w-5 h-5 text-[#EFE6D5]" />
               </div>
-              <span className="font-carnival text-xl text-[#FFD700]">
-                Nexothsav
+              <span className="font-mega text-xl text-[#EFE6D5] tracking-wider">
+                NEXOTHSAV
               </span>
             </div>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.path}
-                  className="font-carnival text-sm text-white hover:text-[#FFD700] transition-colors"
+                  className="font-header text-sm text-[#EFE6D5] hover:text-[#4A7A7A] transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -63,7 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                   {user.role === UserRole.ADMIN && (
                     <button
                       onClick={() => router.push('/admin/scanner')}
-                      className="btn-carnival btn-carnival-red text-xs py-2 px-3"
+                      className="btn-ronin btn-ronin-jade text-xs py-2 px-3"
                     >
                       <ScanLine className="w-4 h-4" />
                       Scanner
@@ -71,14 +71,14 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                   )}
                   <button
                     onClick={() => router.push(user.role === UserRole.PARTICIPANT ? '/dashboard' : '/admin')}
-                    className="btn-carnival btn-carnival-yellow text-xs py-2 px-3"
+                    className="btn-ronin btn-ronin-cream text-xs py-2 px-3"
                   >
                     <UserIcon className="w-4 h-4" />
                     {user.role === UserRole.PARTICIPANT ? 'Dashboard' : 'Admin'}
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="btn-carnival btn-carnival-white text-xs py-2 px-3"
+                    className="btn-ronin btn-ronin-ghost text-xs py-2 px-3"
                   >
                     <LogOut className="w-4 h-4" />
                     Exit
@@ -87,9 +87,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
               ) : (
                 <button
                   onClick={() => router.push('/login')}
-                  className="btn-carnival btn-carnival-yellow"
+                  className="btn-ronin btn-ronin-jade"
                 >
-                  Join the Party!
+                  Enter the Arena
                 </button>
               )}
             </div>
@@ -98,7 +98,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-[#FFD700] p-2"
+                className="text-[#EFE6D5] p-2 border-2 border-[#EFE6D5]"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -108,13 +108,13 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-[#1A1A2E] border-t-2 border-[#FFD700]">
+          <div className="md:hidden bg-[#080808] border-t-4 border-[#2F5C5C]">
             <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.path}
-                  className="block font-carnival text-white hover:text-[#FFD700] py-2"
+                  className="block font-header text-[#EFE6D5] hover:text-[#4A7A7A] py-2 border-b border-[#2F5C5C]"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
@@ -128,7 +128,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                         router.push('/admin/scanner');
                         setIsMenuOpen(false);
                       }}
-                      className="w-full btn-carnival btn-carnival-red text-left"
+                      className="w-full btn-ronin btn-ronin-jade text-left"
                     >
                       🔍 Food Scanner
                     </button>
@@ -138,7 +138,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                       router.push(user.role === UserRole.PARTICIPANT ? '/dashboard' : '/admin');
                       setIsMenuOpen(false);
                     }}
-                    className="w-full btn-carnival btn-carnival-yellow text-left"
+                    className="w-full btn-ronin btn-ronin-cream text-left"
                   >
                     Dashboard
                   </button>
@@ -147,7 +147,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                       handleLogout();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full btn-carnival btn-carnival-white text-left text-[#FF0000]"
+                    className="w-full btn-ronin btn-ronin-ghost text-left"
                   >
                     Logout
                   </button>
@@ -158,9 +158,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                     router.push('/login');
                     setIsMenuOpen(false);
                   }}
-                  className="w-full btn-carnival btn-carnival-yellow"
+                  className="w-full btn-ronin btn-ronin-jade"
                 >
-                  Join the Party!
+                  Enter the Arena
                 </button>
               )}
             </div>
@@ -172,46 +172,44 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
         {children}
       </main>
 
-      {/* Carnival Footer */}
-      <footer className="footer-carnival text-white py-12">
+      {/* Ronin Footer */}
+      <footer className="footer-ronin text-[#EFE6D5] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-[#FFD700] border-2 border-[#FFD700] rounded-full flex items-center justify-center">
-                  <Sun className="w-6 h-6 text-[#FF0000]" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#2F5C5C] border-2 border-[#EFE6D5] flex items-center justify-center">
+                  <Swords className="w-5 h-5 text-[#EFE6D5]" />
                 </div>
-                <span className="font-carnival text-xl text-[#FFD700]">Nexothsav</span>
+                <span className="font-mega text-xl text-[#EFE6D5]">NEXOTHSAV</span>
               </div>
-              <p className="text-gray-300 max-w-sm">
-                Experience Srinathon, our flagship 24-hour hackathon, along with Robo Race, Aero Events, and more exciting activities!
+              <p className="font-body text-[#EFE6D5] opacity-70 max-w-sm">
+                Experience Srinathon, our flagship 24-hour hackathon, along with Robo Race, Aero Events, and more exciting activities.
               </p>
             </div>
             <div>
-              <h3 className="font-carnival text-[#FFD700] mb-4">Events</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-[#FFD700]">🔥 Srinathon</a></li>
-                <li><a href="#" className="hover:text-[#FFD700]">🤖 Robo Race</a></li>
-                <li><a href="#" className="hover:text-[#FFD700]">✈️ Aero Events</a></li>
+              <h3 className="font-header text-[#4A7A7A] mb-4">Events</h3>
+              <ul className="space-y-2 font-body text-sm">
+                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">⚔️ Srinathon</a></li>
+                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">🤖 Robo Race</a></li>
+                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">✈️ Aero Events</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-carnival text-[#FFD700] mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/login" className="hover:text-[#FFD700]">Register</Link></li>
-                <li><Link href="/dashboard" className="hover:text-[#FFD700]">Dashboard</Link></li>
-                <li><a href="#" className="hover:text-[#FFD700]">Contact</a></li>
+              <h3 className="font-header text-[#4A7A7A] mb-4">Quick Links</h3>
+              <ul className="space-y-2 font-body text-sm">
+                <li><Link href="/login" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">Register</Link></li>
+                <li><Link href="/dashboard" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">Dashboard</Link></li>
+                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">Contact</a></li>
               </ul>
             </div>
           </div>
 
-          {/* Zigzag Divider */}
-          <div className="my-8 h-4 bg-[#FFD700]" style={{
-            clipPath: 'polygon(0 100%, 2.5% 0, 5% 100%, 7.5% 0, 10% 100%, 12.5% 0, 15% 100%, 17.5% 0, 20% 100%, 22.5% 0, 25% 100%, 27.5% 0, 30% 100%, 32.5% 0, 35% 100%, 37.5% 0, 40% 100%, 42.5% 0, 45% 100%, 47.5% 0, 50% 100%, 52.5% 0, 55% 100%, 57.5% 0, 60% 100%, 62.5% 0, 65% 100%, 67.5% 0, 70% 100%, 72.5% 0, 75% 100%, 77.5% 0, 80% 100%, 82.5% 0, 85% 100%, 87.5% 0, 90% 100%, 92.5% 0, 95% 100%, 97.5% 0, 100% 100%)'
-          }}></div>
+          {/* Ink Divider */}
+          <div className="my-8 divider-ink-jagged"></div>
 
-          <div className="text-center text-gray-400">
-            <p className="font-carnival text-sm">© 2024 Nexothsav • Made by Manish</p>
+          <div className="text-center">
+            <p className="font-body text-sm text-[#EFE6D5] opacity-50">© 2024 NEXOTHSAV • Made by Manish</p>
           </div>
         </div>
       </footer>
