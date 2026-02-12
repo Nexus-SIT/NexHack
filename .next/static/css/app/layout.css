@@ -517,6 +517,9 @@
   .min-h-\[95vh\] {
     min-height: 95vh;
   }
+  .min-h-\[100vh\] {
+    min-height: 100vh;
+  }
   .min-h-\[calc\(100vh-200px\)\] {
     min-height: calc(100vh - 200px);
   }
@@ -559,8 +562,20 @@
   .w-32 {
     width: calc(var(--spacing) * 32);
   }
+  .w-\[90\%\] {
+    width: 90%;
+  }
   .w-\[260px\] {
     width: 260px;
+  }
+  .w-\[280px\] {
+    width: 280px;
+  }
+  .w-\[400px\] {
+    width: 400px;
+  }
+  .w-\[500px\] {
+    width: 500px;
   }
   .w-full {
     width: 100%;
@@ -605,6 +620,10 @@
   }
   .-translate-y-1\/2 {
     --tw-translate-y: calc(calc(1/2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .-translate-y-\[60\%\] {
+    --tw-translate-y: calc(60% * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .-rotate-1 {
@@ -1218,9 +1237,29 @@
       opacity: 50%;
     }
   }
+  .sm\:w-\[85\%\] {
+    @media (width >= 40rem) {
+      width: 85%;
+    }
+  }
   .sm\:w-\[300px\] {
     @media (width >= 40rem) {
       width: 300px;
+    }
+  }
+  .sm\:w-\[340px\] {
+    @media (width >= 40rem) {
+      width: 340px;
+    }
+  }
+  .sm\:w-\[480px\] {
+    @media (width >= 40rem) {
+      width: 480px;
+    }
+  }
+  .sm\:w-\[600px\] {
+    @media (width >= 40rem) {
+      width: 600px;
     }
   }
   .sm\:w-auto {
@@ -1348,9 +1387,29 @@
       display: none;
     }
   }
+  .md\:w-\[80\%\] {
+    @media (width >= 48rem) {
+      width: 80%;
+    }
+  }
   .md\:w-\[340px\] {
     @media (width >= 48rem) {
       width: 340px;
+    }
+  }
+  .md\:w-\[420px\] {
+    @media (width >= 48rem) {
+      width: 420px;
+    }
+  }
+  .md\:w-\[580px\] {
+    @media (width >= 48rem) {
+      width: 580px;
+    }
+  }
+  .md\:w-\[720px\] {
+    @media (width >= 48rem) {
+      width: 720px;
     }
   }
   .md\:grid-cols-2 {
@@ -1436,6 +1495,21 @@
       width: 380px;
     }
   }
+  .lg\:w-\[500px\] {
+    @media (width >= 64rem) {
+      width: 500px;
+    }
+  }
+  .lg\:w-\[700px\] {
+    @media (width >= 64rem) {
+      width: 700px;
+    }
+  }
+  .lg\:w-\[850px\] {
+    @media (width >= 64rem) {
+      width: 850px;
+    }
+  }
   .lg\:grid-cols-2 {
     @media (width >= 64rem) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1488,6 +1562,16 @@
   .lg\:text-\[13rem\] {
     @media (width >= 64rem) {
       font-size: 13rem;
+    }
+  }
+  .xl\:w-\[750px\] {
+    @media (width >= 80rem) {
+      width: 750px;
+    }
+  }
+  .xl\:w-\[900px\] {
+    @media (width >= 80rem) {
+      width: 900px;
     }
   }
   .xl\:text-7xl {

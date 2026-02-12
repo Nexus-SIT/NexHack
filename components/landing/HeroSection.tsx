@@ -1,48 +1,52 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import KathakaliSVG from './KathakaliSVG';
 
 const HeroSection = () => {
     const router = useRouter();
 
     return (
-        <section className="block-blue relative overflow-hidden min-h-[95vh] flex items-center">
-            {/* Watermark pattern overlay */}
-            <div className="absolute inset-0 pattern-mandala"></div>
-            <div className="absolute inset-0 pattern-watermark"></div>
-
-            {/* Subtle geometric frame lines */}
-            <div className="absolute top-6 left-6 right-6 bottom-6 border border-white/[0.06] pointer-events-none"></div>
-            <div className="absolute top-10 left-10 right-10 bottom-10 border border-white/[0.04] pointer-events-none"></div>
-
+        <section
+            className="relative overflow-hidden min-h-[95vh] flex items-center"
+            style={{
+                backgroundImage: 'url(/herobg.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+            }}
+        >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 w-full">
                 <div className="flex flex-col items-center text-center relative">
 
-                    {/* NEXATHON title — behind dancer */}
-                    <h1
-                        className="font-mega text-[6rem] sm:text-[8rem] md:text-[10rem] lg:text-[13rem] xl:text-[16rem] text-white leading-[0.85] tracking-wider select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 opacity-[0.12]"
-                        style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.3)' }}
-                    >
-                        NEXATHON
-                    </h1>
-
-                    {/* Kathakali dancer — centered, in front of title */}
-                    <div className="relative z-10 w-[260px] sm:w-[300px] md:w-[340px] lg:w-[380px] mb-6">
-                        <KathakaliSVG className="w-full h-auto hero-illustration drop-shadow-[6px_6px_0px_rgba(0,0,0,0.5)]" />
+                    {/* NEXATHON text image — behind dancer */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] z-0 w-[90%] sm:w-[85%] md:w-[80%] pointer-events-none select-none">
+                        <Image
+                            src="/nexathontext.png"
+                            alt="NEXATHON"
+                            width={1920}
+                            height={400}
+                            className="w-full h-auto"
+                            priority
+                        />
                     </div>
 
-                    {/* Foreground NEXATHON title */}
-                    <h2 className="font-mega text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white relative z-20 mb-4"
-                        style={{ textShadow: '4px 4px 0px #080808' }}
-                    >
-                        NEXATHON
-                    </h2>
+                    {/* Yakshagana dancer — centered, in front of title */}
+                    <div className="relative z-10 w-[500px] sm:w-[600px] md:w-[720px] lg:w-[850px] xl:w-[900px] mb-6">
+                        <Image
+                            src="/yaksaganahero.png"
+                            alt="Yakshagana Dancer"
+                            width={1000}
+                            height={1000}
+                            className="w-full h-auto"
+                            priority
+                        />
+                    </div>
 
                     {/* Tagline */}
-                    <p className="font-header text-sm sm:text-base text-white/70 tracking-[0.3em] mb-2">
+                    <p className="font-header text-sm sm:text-base text-white/70 tracking-[0.3em] mb-2 relative z-20">
                         CODE · CULTURE · CREATE
                     </p>
 
