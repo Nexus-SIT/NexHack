@@ -1,27 +1,22 @@
 import type { Metadata } from 'next';
-import { Anton, Oswald, JetBrains_Mono } from 'next/font/google';
+import { Bebas_Neue, Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/AuthProvider';
 
-const anton = Anton({
+const bebasNeue = Bebas_Neue({
     weight: '400',
     subsets: ['latin'],
-    variable: '--font-anton'
+    variable: '--font-bebas-neue'
 });
 
-const oswald = Oswald({
+const inter = Inter({
     subsets: ['latin'],
-    variable: '--font-oswald'
-});
-
-const jetbrainsMono = JetBrains_Mono({
-    subsets: ['latin'],
-    variable: '--font-jetbrains'
+    variable: '--font-inter'
 });
 
 export const metadata: Metadata = {
-    title: 'Nexathon - The Ronin\'s Scroll',
-    description: 'A comprehensive Hackathon Management System featuring team formation, QR-based food coupon redemption, and role-based dashboards. Made by Manish.',
+    title: 'NEXATHON — Code. Culture. Create.',
+    description: 'NEXATHON is a high-impact tech hackathon blending cultural roots with hyper-modern innovation. Register now for 24 hours of hacking, workshops, and more.',
     authors: [{ name: 'Manish' }],
 };
 
@@ -32,7 +27,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={`${anton.variable} ${oswald.variable} ${jetbrainsMono.variable} bg-[#C91B1A] text-[#EFE6D5] texture-overlay`}>
+            <body className={`${bebasNeue.variable} ${inter.variable} bg-[#0E46A3] text-white texture-overlay`}>
                 <AuthProvider>
                     {children}
                 </AuthProvider>

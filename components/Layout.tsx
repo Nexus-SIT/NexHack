@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { User, UserRole } from '@/types';
-import { Menu, X, User as UserIcon, LogOut, ScanLine, Swords } from 'lucide-react';
+import { Menu, X, User as UserIcon, LogOut, ScanLine, Hexagon } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -25,24 +25,25 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
     { name: 'Home', path: '/' },
     { name: 'Events', path: '/#events' },
     { name: 'Schedule', path: '/#schedule' },
+    { name: 'Tracks', path: '/#tracks' },
   ];
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Ronin Navigation */}
-      <nav className="nav-ronin sticky top-0 z-50">
+      {/* ===== NEXATHON NAV ===== */}
+      <nav className="nav-nex sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            {/* Logo - Katana/Sword Icon */}
+            {/* Logo */}
             <div
               className="flex items-center cursor-pointer gap-3"
               onClick={() => router.push('/')}
             >
-              <div className="w-10 h-10 bg-[#2F5C5C] border-2 border-[#EFE6D5] flex items-center justify-center">
-                <Swords className="w-5 h-5 text-[#EFE6D5]" />
+              <div className="w-10 h-10 bg-[#0E46A3] border-2 border-white flex items-center justify-center">
+                <Hexagon className="w-5 h-5 text-white" />
               </div>
-              <span className="font-mega text-xl text-[#EFE6D5] tracking-wider">
-                NEXOTHSAV
+              <span className="font-mega text-2xl text-white tracking-wider">
+                NEXATHON
               </span>
             </div>
 
@@ -52,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                 <Link
                   key={link.name}
                   href={link.path}
-                  className="font-header text-sm text-[#EFE6D5] hover:text-[#4A7A7A] transition-colors"
+                  className="font-header text-xs text-white/70 hover:text-white transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -63,7 +64,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                   {user.role === UserRole.ADMIN && (
                     <button
                       onClick={() => router.push('/admin/scanner')}
-                      className="btn-ronin btn-ronin-jade text-xs py-2 px-3"
+                      className="btn-nex btn-nex-ghost text-xs py-2 px-3"
                     >
                       <ScanLine className="w-4 h-4" />
                       Scanner
@@ -71,14 +72,14 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                   )}
                   <button
                     onClick={() => router.push(user.role === UserRole.PARTICIPANT ? '/dashboard' : '/admin')}
-                    className="btn-ronin btn-ronin-cream text-xs py-2 px-3"
+                    className="btn-nex btn-nex-primary text-xs py-2 px-3"
                   >
                     <UserIcon className="w-4 h-4" />
                     {user.role === UserRole.PARTICIPANT ? 'Dashboard' : 'Admin'}
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="btn-ronin btn-ronin-ghost text-xs py-2 px-3"
+                    className="btn-nex btn-nex-ghost text-xs py-2 px-3"
                   >
                     <LogOut className="w-4 h-4" />
                     Exit
@@ -87,9 +88,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
               ) : (
                 <button
                   onClick={() => router.push('/login')}
-                  className="btn-ronin btn-ronin-jade"
+                  className="btn-nex btn-nex-primary"
                 >
-                  Enter the Arena
+                  Register Now
                 </button>
               )}
             </div>
@@ -98,7 +99,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-[#EFE6D5] p-2 border-2 border-[#EFE6D5]"
+                className="text-white p-2 border-2 border-white"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -108,13 +109,13 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-[#080808] border-t-4 border-[#2F5C5C]">
+          <div className="md:hidden bg-[#080808] border-t-3 border-[#0E46A3]">
             <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.path}
-                  className="block font-header text-[#EFE6D5] hover:text-[#4A7A7A] py-2 border-b border-[#2F5C5C]"
+                  className="block font-header text-white/80 hover:text-white py-2 border-b border-white/10"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
@@ -128,9 +129,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                         router.push('/admin/scanner');
                         setIsMenuOpen(false);
                       }}
-                      className="w-full btn-ronin btn-ronin-jade text-left"
+                      className="w-full btn-nex btn-nex-ghost text-left"
                     >
-                      🔍 Food Scanner
+                      🔍 Scanner
                     </button>
                   )}
                   <button
@@ -138,7 +139,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                       router.push(user.role === UserRole.PARTICIPANT ? '/dashboard' : '/admin');
                       setIsMenuOpen(false);
                     }}
-                    className="w-full btn-ronin btn-ronin-cream text-left"
+                    className="w-full btn-nex btn-nex-primary text-left"
                   >
                     Dashboard
                   </button>
@@ -147,7 +148,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                       handleLogout();
                       setIsMenuOpen(false);
                     }}
-                    className="w-full btn-ronin btn-ronin-ghost text-left"
+                    className="w-full btn-nex btn-nex-ghost text-left"
                   >
                     Logout
                   </button>
@@ -158,9 +159,9 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
                     router.push('/login');
                     setIsMenuOpen(false);
                   }}
-                  className="w-full btn-ronin btn-ronin-jade"
+                  className="w-full btn-nex btn-nex-primary"
                 >
-                  Enter the Arena
+                  Register Now
                 </button>
               )}
             </div>
@@ -172,44 +173,44 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
         {children}
       </main>
 
-      {/* Ronin Footer */}
-      <footer className="footer-ronin text-[#EFE6D5] py-12">
+      {/* ===== NEXATHON FOOTER ===== */}
+      <footer className="footer-nex text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-[#2F5C5C] border-2 border-[#EFE6D5] flex items-center justify-center">
-                  <Swords className="w-5 h-5 text-[#EFE6D5]" />
+                <div className="w-10 h-10 bg-[#0E46A3] border-2 border-white flex items-center justify-center">
+                  <Hexagon className="w-5 h-5 text-white" />
                 </div>
-                <span className="font-mega text-xl text-[#EFE6D5]">NEXOTHSAV</span>
+                <span className="font-mega text-2xl text-white">NEXATHON</span>
               </div>
-              <p className="font-body text-[#EFE6D5] opacity-70 max-w-sm">
-                Experience Srinathon, our flagship 24-hour hackathon, along with Robo Race, Aero Events, and more exciting activities.
+              <p className="font-body text-white/60 max-w-sm">
+                Where code meets culture. A 24-hour hackathon experience blending
+                innovation with tradition. Build, learn, and compete.
               </p>
             </div>
             <div>
-              <h3 className="font-header text-[#4A7A7A] mb-4">Events</h3>
+              <h3 className="font-header text-[#1A5FCF] mb-4 text-sm">Events</h3>
               <ul className="space-y-2 font-body text-sm">
-                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">⚔️ Srinathon</a></li>
-                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">🤖 Robo Race</a></li>
-                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">✈️ Aero Events</a></li>
+                <li><a href="#" className="text-white/60 hover:text-white">💻 Hackathon</a></li>
+                <li><a href="#" className="text-white/60 hover:text-white">🤖 Robo Race</a></li>
+                <li><a href="#" className="text-white/60 hover:text-white">✈️ Aero Events</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-header text-[#4A7A7A] mb-4">Quick Links</h3>
+              <h3 className="font-header text-[#1A5FCF] mb-4 text-sm">Quick Links</h3>
               <ul className="space-y-2 font-body text-sm">
-                <li><Link href="/login" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">Register</Link></li>
-                <li><Link href="/dashboard" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">Dashboard</Link></li>
-                <li><a href="#" className="text-[#EFE6D5] opacity-70 hover:opacity-100 hover:text-[#4A7A7A]">Contact</a></li>
+                <li><Link href="/login" className="text-white/60 hover:text-white">Register</Link></li>
+                <li><Link href="/dashboard" className="text-white/60 hover:text-white">Dashboard</Link></li>
+                <li><a href="#" className="text-white/60 hover:text-white">Contact</a></li>
               </ul>
             </div>
           </div>
 
-          {/* Ink Divider */}
-          <div className="my-8 divider-ink-jagged"></div>
+          <div className="divider-white my-8 opacity-20"></div>
 
           <div className="text-center">
-            <p className="font-body text-sm text-[#EFE6D5] opacity-50">© 2024 NEXOTHSAV • Made by Manish</p>
+            <p className="font-body text-sm text-white/40">© 2026 NEXATHON • Made by Manish</p>
           </div>
         </div>
       </footer>
